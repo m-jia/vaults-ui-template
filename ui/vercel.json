@@ -1,4 +1,6 @@
 {
+  "installCommand": "bun run install-vercel",
+  "buildCommand": "bun run build-vercel",
   "crons": [
     {
       "path": "/api/cron/vaults/backfill-vault-depositor-records",
