@@ -13,7 +13,7 @@ export const useSyncVaultClient = () => {
   const setAppStore = useAppStore((s) => s.set);
 
   useEffect(() => {
-    if (driftClientIsReady && driftClient && connection) {
+    if (driftClient && connection) { //driftClientIsReady && 
       const vaultProgram = getDriftVaultProgram(
         connection,
         COMMON_UI_UTILS.createThrowawayIWallet(),

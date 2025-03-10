@@ -57,13 +57,23 @@ const vaultStats = useAppStore((s) => s.vaultsStats[props.vaultPubkey]);
           value={`${vaultStats?.maxDrawdownPct.toFixed(2)}%`}
           loading={isVaultStatsLoading}
         />
-      </div>
-      <div className="flex flex-col flex-1 gap-2 sm:pl-4">
         <PerformanceBreakdownStat
           label="30D Volume"
           value={`$${vaultStats?.volume30Days.toMillified()}`}
           loading={isVaultStatsLoading}
         />
+        <PerformanceBreakdownStat label="Total Shares" value={`${vaultStats?.totalShares.prettyPrint(true)}`} loading={isVaultStatsLoading} />
+        <PerformanceBreakdownStat label="TVL Base" value={`$${vaultStats?.tvlBase.toMillified()}`} loading={isVaultStatsLoading}/>
+        <PerformanceBreakdownStat label="TVL Quote" value={`$${vaultStats?.tvlQuote.toMillified()}`} loading={isVaultStatsLoading}/>
+        <PerformanceBreakdownStat label="Total Base PNL" value={`${vaultStats?.totalBasePnl.prettyPrint(true)}`} marketSymbol={props.marketSymbol} loading={isVaultStatsLoading}/>
+        <PerformanceBreakdownStat label="Total Quote PNL" value={`${vaultStats?.totalQuotePnl.prettyPrint(true)}`} marketSymbol={props.marketSymbol} loading={isVaultStatsLoading}/>
+        <PerformanceBreakdownStat label="Notional Growth Quote PNL" value={`${vaultStats?.notionalGrowthQuotePnl.prettyPrint(true)}`} marketSymbol={props.marketSymbol} lloading={isVaultStatsLoading}/>
+        <PerformanceBreakdownStat label="Vault Redeem Period" value={`${vaultStats?.vaultRedeemPeriodSecs.toString()} seconds`} loading={isVaultStatsLoading}/>
+        <PerformanceBreakdownStat label="Capacity Percent" value={`${vaultStats?.capacityPct.toFixed(2)} %`} loading={isVaultStatsLoading}/>
+        <PerformanceBreakdownStat label="Profit Share" value={`${(vaultStats?.profitShare / 10000)} %`} loading={isVaultStatsLoading}/>
+        <PerformanceBreakdownStat label="APY 7d" value={`${vaultStats?.apys["7d"].toFixed(2)} %`} loading={isVaultStatsLoading} />
+        <PerformanceBreakdownStat label="APY 30d" value={`${vaultStats?.apys["30d"].toFixed(2)} %`} loading={isVaultStatsLoading} />
+        <PerformanceBreakdownStat label="APY 90d" value={`${vaultStats?.apys["90d"].toFixed(2)} %`} loading={isVaultStatsLoading} />
       </div>
     </div>
   );
@@ -118,7 +128,7 @@ export const VaultPerformanceBreakdown = (props: {
         vaultPubkey={props.vaultPubkey}
         marketSymbol={marketSymbol}
       />
-      <div className="flex flex-wrap items-center justify-between gap-2 mt-5">
+      {/* <div className="flex flex-wrap items-center justify-between gap-2 mt-5">
         <ToggleGroup
           type="single"
           className="bg-gray-300 rounded"
@@ -153,7 +163,7 @@ export const VaultPerformanceBreakdown = (props: {
         depositAssetMarketIndex={props.depositAssetMarketIndex}
         graphType={selectedGraph}
         period={selectedPeriod}
-      />
+      /> */}
     </div>
   );
 };

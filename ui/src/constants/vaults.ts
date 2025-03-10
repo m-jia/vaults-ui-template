@@ -17,14 +17,24 @@ export type UiVaultConfig = {
 };
 
 const TEST_VAULT_1: UiVaultConfig = {
-  name: "test-vault-1",
-  vaultPubkeyString: "8v831M6mXQjyAVXEqcAdXYhp5Z3sYoz7pw9EBU2oEUZL",
-  managerPubkeyString: "9qJW4iQ425Bz9DRHTRBtXUs4cd68XTJoFYN9xmF9my7n",
-  userPubKeyString: "FooNUVA6cw3itPX6AsNeqcect1koowEjMipKq6tgYmcX",
+  name: "YouZongTestVault1",
+  vaultPubkeyString: "DK1t6NqwF5XvD33ZENpAUTVwdVwFvduJuaCfLEfkBnou",
+  managerPubkeyString: "82EKgy8xkdf4PYxUaamzxtkKiocf6BrCv5qFWrHjErRs",
+  userPubKeyString: "9AhG9szMSespM1du9PvEm9gA9ND6uytaU8kAHbaCiym5",
   description:
-    "Multiply your yields with delta-neutral market making strategies focused on SOL",
+    "YouZong Test Vault 1",
   market: SPOT_MARKETS_LOOKUP[0],
   isNotionalGrowthStrategy: false,
 };
 
-export const VAULTS = [TEST_VAULT_1];
+// const TEST_VAULT_2: UiVaultConfig = {
+//   name: "JLPTradersRekt",
+//   vaultPubkeyString: "2r81MPMDjGSrbmGRwzDg6aqhe3t3vbKcrYfpes5bXckS",
+//   managerPubkeyString: "C77bxLHWjnAVeG9HdMxu1gunFnjRCcWUDZYfa7xbacHr",
+//   userPubKeyString: "2dBBq7SADmVMJTcZeSN4hQM4NbyVRAwfcJqMiv3Kx5wf",
+//   description: "JLP Traders Rekt",
+//   market: SPOT_MARKETS_LOOKUP[0],
+//   isNotionalGrowthStrategy: false,
+// };
+
+export const VAULTS = [TEST_VAULT_1];//, TEST_VAULT_2

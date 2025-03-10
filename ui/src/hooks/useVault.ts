@@ -43,10 +43,9 @@ export const useVault = (vaultPubkey: string) => {
   const syncVaultStats = useCallback(async () => {
     if (
       vaultPubkey &&
-      driftClientIsReady &&
+      // driftClientIsReady &&
       driftClient &&
-      vaultClient &&
-      apyReturnsLookup[vaultPubkey]
+      vaultClient // && apyReturnsLookup[vaultPubkey]
     ) {
       const vaultStats = await getSingleVaultStats(
         driftClient,
@@ -58,6 +57,8 @@ export const useVault = (vaultPubkey: string) => {
       setAppStore((s) => {
         s.vaultsStats[vaultPubkey] = vaultStats;
       });
+    } else {
+      console.log('vx_syncVaultStats not ready', [vaultPubkey, driftClientIsReady, driftClient, vaultClient, apyReturnsLookup]);
     }
   }, [
     vaultPubkey,

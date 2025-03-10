@@ -9,12 +9,12 @@ import { PerformanceBreakdownStat } from "./PerformanceBreakdownStat";
 import { GraphType, Period } from "./VaultGraphs";
 import { Typo, useCommonDriftStore } from "@drift-labs/react";
 import { useState } from "react";
-import { VaultDepositorHistoryGraph } from "./VaultDepositorHistoryGraph";
+// import { VaultDepositorHistoryGraph } from "./VaultDepositorHistoryGraph";
 import { useVaultSnapshotHistory } from "@/hooks/useVaultSnapshotHistory";
-import { useVaultDepositorHistory } from "@/hooks/useVaultDepositorHistory";
+// import { useVaultDepositorHistory } from "@/hooks/useVaultDepositorHistory";
 import useAppStore from "@/stores/app/useAppStore";
-import { ToggleGroupItem } from "@/components/ui/toggle-group";
-import { ToggleGroup } from "@/components/ui/toggle-group";
+// import { ToggleGroupItem } from "@/components/ui/toggle-group";
+// import { ToggleGroup } from "@/components/ui/toggle-group";
 import { getMaxDailyDrawdownFromHistory, getUiVaultConfig } from "@/lib/utils";
 import { Vault, VaultDepositor } from "@drift-labs/vaults-sdk";
 
@@ -28,12 +28,12 @@ const UserPerformanceBreakdownStats = (props: {
   isVaultDepositorLoaded: boolean;
 }) => {
   const vaultStats = useAppStore((s) => s.vaultsStats[props.vaultPubkey]);
-  const { vaultSnapshots, isVaultSnapshotsLoading } = useVaultSnapshotHistory(
-    props.vaultPubkey,
-  );
+  // const { vaultSnapshots, isVaultSnapshotsLoading } = useVaultSnapshotHistory(
+  //   props.vaultPubkey,
+  // );
   const uiVaultConfig = getUiVaultConfig(props.vaultPubkey);
-  const { vaultDepositorHistory, isVaultDepositorHistoryLoading } =
-    useVaultDepositorHistory(props.vaultPubkey);
+  // const { vaultDepositorHistory, isVaultDepositorHistoryLoading } =
+  //   useVaultDepositorHistory(props.vaultPubkey);
   const {
     vaultAccountData,
     isVaultDepositorLoaded,
@@ -42,10 +42,10 @@ const UserPerformanceBreakdownStats = (props: {
 
   const isLoading =
     !vaultAccountData ||
-    !isVaultDepositorLoaded ||
-    !vaultStats?.hasLoadedOnChainStats;
-  const isMaxDailyDrawdownLoading =
-    isVaultSnapshotsLoading || isVaultDepositorHistoryLoading;
+    !isVaultDepositorLoaded; // ||
+    // !vaultDepositorAccountData?.hasLoadedOnChainStats;
+  const isMaxDailyDrawdownLoading = false;
+    // isVaultSnapshotsLoading || isVaultDepositorHistoryLoading;
 
   const precisionExp = props.depositAssetConfig.precisionExp;
   const marketSymbol = props.depositAssetConfig.symbol;
@@ -95,23 +95,23 @@ const UserPerformanceBreakdownStats = (props: {
   function getMaxDailyDrawdownPct() {
     if (
       !vaultDepositorAccountData ||
-      !vaultAccountData ||
-      !vaultSnapshots.length ||
-      !vaultDepositorHistory.length
+      !vaultAccountData //||
+      // !vaultSnapshots.length ||
+      // !vaultDepositorHistory.length
     )
       return 0;
 
-    const firstDepositorTxn = vaultDepositorHistory[0];
-    const relevantVaultSnapshots = vaultSnapshots
-      .filter((snapshot) => +snapshot.ts >= +firstDepositorTxn.ts)
-      .sort((a, b) => +a.ts - +b.ts);
+    // const firstDepositorTxn = vaultDepositorHistory[0];
+    // const relevantVaultSnapshots = vaultSnapshots
+    //   .filter((snapshot) => +snapshot.ts >= +firstDepositorTxn.ts)
+    //   .sort((a, b) => +a.ts - +b.ts);
 
-    const maxDailyDrawdown = getMaxDailyDrawdownFromHistory(
-      relevantVaultSnapshots,
-      uiVaultConfig?.isNotionalGrowthStrategy
-        ? "totalAccountQuoteValue"
-        : "totalAccountBaseValue",
-    );
+    const maxDailyDrawdown = 0; //getMaxDailyDrawdownFromHistory(
+    //   relevantVaultSnapshots,
+    //   uiVaultConfig?.isNotionalGrowthStrategy
+    //     ? "totalAccountQuoteValue"
+    //     : "totalAccountBaseValue",
+    // );
 
     return maxDailyDrawdown * 100;
   }
@@ -119,15 +119,25 @@ const UserPerformanceBreakdownStats = (props: {
   return (
     <div className="flex flex-col w-full gap-2 mt-4 sm:divide-x divide-container-border sm:flex-row sm:gap-0">
       <div className="flex flex-col flex-1 gap-2 sm:pr-4">
+        <PerformanceBreakdownStat label="Total Deposits" value={`${BigNum.from(vaultDepositorAccountData?.totalDeposits, precisionExp).prettyPrint()}`} marketSymbol={marketSymbol} loading={isMaxDailyDrawdownLoading}/>
         <PerformanceBreakdownStat
           label="Your Cumulative Net Deposits"
           value={`${cumulativeNetDeposits.prettyPrint()}`}
           marketSymbol={marketSymbol}
           loading={isLoading}
         />
+        <PerformanceBreakdownStat label="Vault Shares" value={`${BigNum.from(vaultDepositorAccountData?.vaultShares, precisionExp).prettyPrint()}`} loading={isMaxDailyDrawdownLoading}/>
+        <PerformanceBreakdownStat label="Vault Shares Base" value={`${vaultDepositorAccountData?.vaultSharesBase.toString()}`} loading={isMaxDailyDrawdownLoading}/>
         <PerformanceBreakdownStat
-          label="Vault Shares"
+          label="Vault Shares %"
           value={`${userVaultSharesPct.prettyPrint()}%`}
+          loading={isLoading}
+        />
+        <PerformanceBreakdownStat label="Cumulative Profit Share Amount" value={`${BigNum.from(vaultDepositorAccountData?.cumulativeProfitShareAmount, precisionExp).prettyPrint()}`} loading={isMaxDailyDrawdownLoading}/>
+        <PerformanceBreakdownStat
+          label="Profit Share Fees Paid"
+          value={`${feesPaid.prettyPrint()}`}
+          marketSymbol={marketSymbol}
           loading={isLoading}
         />
         <PerformanceBreakdownStat
@@ -135,20 +145,20 @@ const UserPerformanceBreakdownStats = (props: {
           value={`${maxDailyDrawdownPct.toFixed(2)}%`}
           loading={isMaxDailyDrawdownLoading}
         />
-      </div>
-      <div className="flex flex-col flex-1 gap-2 sm:pl-4">
-        <PerformanceBreakdownStat
-          label="Fees Paid"
-          value={`${feesPaid.prettyPrint()}`}
-          marketSymbol={marketSymbol}
-          loading={isLoading}
-        />
         <PerformanceBreakdownStat
           label="High-Water Mark"
           value={`${highWaterMarkWithCurrentDeposit.prettyPrint()}`}
           marketSymbol={marketSymbol}
           loading={isLoading}
         />
+        <PerformanceBreakdownStat label="Total Withdraws" value={`${BigNum.from(vaultDepositorAccountData?.totalWithdraws, precisionExp).prettyPrint()}`} marketSymbol={marketSymbol} loading={isMaxDailyDrawdownLoading}/>
+        <PerformanceBreakdownStat label="Padding" value={`${vaultDepositorAccountData?.padding.toString()}`} loading={isMaxDailyDrawdownLoading}/>
+        <PerformanceBreakdownStat label="Padding1" value={`${vaultDepositorAccountData?.padding1.toString()}`} loading={isMaxDailyDrawdownLoading}/>
+        <PerformanceBreakdownStat label="Last Valid Timestamp" value={`${(new Date(vaultDepositorAccountData?.lastValidTs.toNumber())).toString()}`} loading={isMaxDailyDrawdownLoading}/>
+        <p>Last Withdraw Request:</p>
+        <PerformanceBreakdownStat label="" value={`${vaultDepositorAccountData?.lastWithdrawRequest.shares.toString()}`} />
+        <PerformanceBreakdownStat label="" value={`${vaultDepositorAccountData?.lastWithdrawRequest.ts.toString()}`} />
+        <PerformanceBreakdownStat label="" value={`${vaultDepositorAccountData?.lastWithdrawRequest.value.toString()}`} />
       </div>
     </div>
   );
@@ -187,17 +197,17 @@ export const VaultDepositorPerformanceBreakdown = (props: {
   vaultDepositorAccountData: VaultDepositor;
   isVaultDepositorLoaded: boolean;
 }) => {
-  const authority = useCommonDriftStore((s) => s.authority);
-  const { isVaultDepositorLoaded, vaultDepositorAccountData } = props;
+  // const authority = useCommonDriftStore((s) => s.authority);
+  // const { isVaultDepositorLoaded, vaultDepositorAccountData } = props;
 
-  const [selectedGraph, setSelectedGraph] = useState(GRAPH_OPTIONS[0].value);
-  const [selectedPeriod, setSelectedPeriod] = useState(PERIOD_OPTIONS[0].value);
+  // const [selectedGraph, setSelectedGraph] = useState(GRAPH_OPTIONS[0].value);
+  // const [selectedPeriod, setSelectedPeriod] = useState(PERIOD_OPTIONS[0].value);
 
-  const isNotVaultDepositor =
-    !authority ||
-    (isVaultDepositorLoaded &&
-      (!vaultDepositorAccountData ||
-        vaultDepositorAccountData.netDeposits.eqn(0)));
+  // const isNotVaultDepositor =
+  //   !authority ||
+  //   (isVaultDepositorLoaded &&
+  //     (!vaultDepositorAccountData ||
+  //       vaultDepositorAccountData.netDeposits.eqn(0)));
 
   return (
     <div className="flex flex-col w-screen p-4 -mx-4 border sm:rounded sm:w-full sm:mx-0 bg-container-bg border-container-border sm:border">
@@ -210,7 +220,7 @@ export const VaultDepositorPerformanceBreakdown = (props: {
         isVaultDepositorLoaded={props.isVaultDepositorLoaded}
       />
 
-      {!isNotVaultDepositor && (
+      {/* {!isNotVaultDepositor && (
         <>
           <div className="flex items-center justify-between mt-5">
             <ToggleGroup
@@ -246,7 +256,7 @@ export const VaultDepositorPerformanceBreakdown = (props: {
             isVaultDepositorLoaded={props.isVaultDepositorLoaded}
           />
         </>
-      )}
+      )} */}
     </div>
   );
 };

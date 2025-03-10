@@ -19,7 +19,7 @@ export const createVaultSnapshot = async (vaultPubkey: string) => {
 };
 
 export const getVaultsApyReturns = async (): Promise<ApyReturnsLookup> => {
-  const apyReturnsData = await kv.hgetall(REDIS_KEYS.periodApys);
+  const apyReturnsData = {}; //await kv.hgetall(REDIS_KEYS.periodApys);
 
   return apyReturnsData as ApyReturnsLookup;
 };

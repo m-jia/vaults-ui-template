@@ -351,7 +351,7 @@ export const useSyncAllVaultsStats = () => {
     Object.keys(offChainVaultsStats).length === 0;
   const vaultClient = useAppStore((s) => s.vaultClient);
   const driftClient = useCommonDriftStore((s) => s.driftClient.client);
-  const driftClientIsReady = useDriftClientIsReady();
+  // const driftClientIsReady = useDriftClientIsReady();
   const connection = useCommonDriftStore((s) => s.connection);
   const getOraclePriceForMarket = useOraclePriceStore(
     (s) => s.getMarketPriceData,
@@ -374,7 +374,7 @@ export const useSyncAllVaultsStats = () => {
     isVaultStatsLoaded;
 
   useEffect(() => {
-    if (driftClient && driftClientIsReady && vaultClient && connection) {
+    if (driftClient && vaultClient && connection) { // && driftClientIsReady
       getMultipleOnChainVaultData(
         driftClient,
         vaultClient,

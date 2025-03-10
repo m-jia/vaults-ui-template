@@ -27,8 +27,8 @@ interface EnvironmentVariables extends AppSetupProps {
 const Env: EnvironmentVariables = {
   driftEnv,
   isDev:
-    !process.env.NEXT_PUBLIC_ENV ||
-    ["local", "master", "devnet"].includes(process.env.NEXT_PUBLIC_ENV),
+    !process.env.NEXT_PUBLIC_DRIFT_ENV ||
+    ["local", "master", "devnet"].includes(process.env.NEXT_PUBLIC_DRIFT_ENV),
   basePollingRateMs: process.env.NEXT_PUBLIC_BASE_POLLING_RATE_MS
     ? Number(process.env.NEXT_PUBLIC_BASE_POLLING_RATE_MS)
     : 1000,
