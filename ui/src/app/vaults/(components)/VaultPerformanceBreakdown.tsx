@@ -67,7 +67,7 @@ const vaultStats = useAppStore((s) => s.vaultsStats[props.vaultPubkey]);
         <PerformanceBreakdownStat label="TVL Quote" value={`$${vaultStats?.tvlQuote.toMillified()}`} loading={isVaultStatsLoading}/>
         <PerformanceBreakdownStat label="Total Base PNL" value={`${vaultStats?.totalBasePnl.prettyPrint(true)}`} marketSymbol={props.marketSymbol} loading={isVaultStatsLoading}/>
         <PerformanceBreakdownStat label="Total Quote PNL" value={`${vaultStats?.totalQuotePnl.prettyPrint(true)}`} marketSymbol={props.marketSymbol} loading={isVaultStatsLoading}/>
-        <PerformanceBreakdownStat label="Notional Growth Quote PNL" value={`${vaultStats?.notionalGrowthQuotePnl.prettyPrint(true)}`} marketSymbol={props.marketSymbol} lloading={isVaultStatsLoading}/>
+        <PerformanceBreakdownStat label="Notional Growth Quote PNL" value={`${vaultStats?.notionalGrowthQuotePnl.prettyPrint(true)}`} marketSymbol={props.marketSymbol} loading={isVaultStatsLoading}/>
         <PerformanceBreakdownStat label="Vault Redeem Period" value={`${vaultStats?.vaultRedeemPeriodSecs.toString()} seconds`} loading={isVaultStatsLoading}/>
         <PerformanceBreakdownStat label="Capacity Percent" value={`${vaultStats?.capacityPct.toFixed(2)} %`} loading={isVaultStatsLoading}/>
         <PerformanceBreakdownStat label="Profit Share" value={`${(vaultStats?.profitShare / 10000)} %`} loading={isVaultStatsLoading}/>
