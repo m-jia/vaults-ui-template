@@ -123,6 +123,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
+  console.log('VX_api call driftClient', driftClient.accountSubscriber.oracleInfos);
   await driftClient.subscribe();
 
   const params = request.nextUrl.searchParams;

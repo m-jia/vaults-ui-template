@@ -43,7 +43,7 @@ export const useVault = (vaultPubkey: string) => {
   const syncVaultStats = useCallback(async () => {
     if (
       vaultPubkey &&
-      // driftClientIsReady &&
+      driftClientIsReady &&
       driftClient &&
       vaultClient // && apyReturnsLookup[vaultPubkey]
     ) {

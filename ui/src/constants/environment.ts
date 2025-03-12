@@ -1,5 +1,5 @@
 import { AppSetupProps } from "@drift-labs/react";
-import { DriftEnv, Wallet, initialize } from "@drift-labs/sdk";
+import { DriftEnv, Wallet, initialize, SpotMarkets, PerpMarkets, } from "@drift-labs/sdk";
 import {
   Config as CommonConfig,
   EnvironmentConstants,
@@ -37,10 +37,14 @@ const Env: EnvironmentVariables = {
   txSenderRetryInterval: 5000,
 };
 
+// VX modified at March 2025
+const vxVaultSpotMarketConfigs = SpotMarkets[driftEnv].filter((market) => [0, 1, 3, 4, 19].includes(market.marketIndex));
+const vxVaultPerpMarketConfigs = PerpMarkets[driftEnv].filter((market) => [0, 1, 2].includes(market.marketIndex));
+
 // Spot markets
-export const SPOT_MARKETS_LOOKUP = CommonConfig.spotMarketsLookup;
+export const SPOT_MARKETS_LOOKUP = vxVaultSpotMarketConfigs; // CommonConfig.spotMarketsLookup;
 
 // Perp markets
-export const PERP_MARKETS_LOOKUP = CommonConfig.perpMarketsLookup;
+export const PERP_MARKETS_LOOKUP = vxVaultPerpMarketConfigs; //CommonConfig.perpMarketsLookup;
 
 export default Env;

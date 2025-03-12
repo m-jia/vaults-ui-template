@@ -1,12 +1,12 @@
 import { VaultStatProps, VaultStatsSkeleton } from "./VaultStatsSkeleton";
 import {
   getVaultDepositorBalance,
-  // getVaultDepositorNotionalNetDeposits,
+  getVaultDepositorNotionalNetDeposits,
 } from "@/lib/vault";
 import { BigNum, QUOTE_PRECISION_EXP, SpotMarketConfig } from "@drift-labs/sdk";
 import { MarketId } from "@drift/common";
 import { MarketIcon } from "@/components/MarketIcon";
-// import { useVaultDepositorHistory } from "@/hooks/useVaultDepositorHistory";
+import { useVaultDepositorHistory } from "@/hooks/useVaultDepositorHistory";
 import {
   calcModifiedDietz,
   Vault,
@@ -34,8 +34,8 @@ export const VaultDepositorStats = (props: {
     props.depositAssetConfig.marketIndex,
   );
   const uiVaultConfig = getUiVaultConfig(props.vaultPubkey);
-  // const { vaultDepositorHistory, isVaultDepositorHistoryLoading } =
-  //   useVaultDepositorHistory(props.vaultPubkey);
+  const { vaultDepositorHistory, isVaultDepositorHistoryLoading } =
+    useVaultDepositorHistory(props.vaultPubkey);
 
   const isMobile = useIsMobileScreenSize();
   const {
@@ -54,9 +54,9 @@ export const VaultDepositorStats = (props: {
   const currentUserNotionalBalance = getCurrentUserNotionalBalance();
 
   const totalBaseEarnings = getTotalBaseEarnings();
-  const totalNotionalEarnings = new BigNum(0); // getTotalNotionalEarnings();
+  const totalNotionalEarnings = getTotalNotionalEarnings();
 
-  const roi = new BigNum(0); // getTimeWeightedRoi();
+  const roi = getTimeWeightedRoi();
 
   function getCurrentUserNotionalBalance() {
     const oraclePrice = getOraclePrice(marketId);
@@ -81,17 +81,17 @@ export const VaultDepositorStats = (props: {
     return totalEarnings;
   }
 
-  // function getTotalNotionalEarnings() {
-  //   const userNotionalNetDeposits = getVaultDepositorNotionalNetDeposits(
-  //     vaultDepositorHistory,
-  //   );
+  function getTotalNotionalEarnings() {
+    const userNotionalNetDeposits = getVaultDepositorNotionalNetDeposits(
+      vaultDepositorHistory,
+    );
 
-  //   const totalNotionalEarnings = currentUserNotionalBalance.sub(
-  //     userNotionalNetDeposits,
-  //   );
+    const totalNotionalEarnings = currentUserNotionalBalance.sub(
+      userNotionalNetDeposits,
+    );
 
-  //   return totalNotionalEarnings;
-  // }
+    return totalNotionalEarnings;
+  }
 
   function getTimeWeightedRoi() {
     if (
@@ -101,37 +101,37 @@ export const VaultDepositorStats = (props: {
     )
       return 0;
 
-    // const formattedHistory = vaultDepositorHistory
-    //   .filter((r) => r.action === "deposit" || r.action === "withdraw")
-    //   .map((deposit) => {
-    //     return {
-    //       ts: deposit.ts,
-    //       marketIndex: deposit.spotMarketIndex, // not needed
-    //       amount: uiVaultConfig?.isNotionalGrowthStrategy
-    //         ? deposit.notionalValue
-    //         : deposit.amount,
-    //       direction: deposit.action as "deposit" | "withdraw",
-    //     };
-    //   })
-    //   .sort((a, b) => +b.ts - +a.ts); // need to sort in descending order
+    const formattedHistory = vaultDepositorHistory
+      .filter((r) => r.action === "deposit" || r.action === "withdraw")
+      .map((deposit) => {
+        return {
+          ts: deposit.ts,
+          marketIndex: deposit.spotMarketIndex, // not needed
+          amount: uiVaultConfig?.isNotionalGrowthStrategy
+            ? deposit.notionalValue
+            : deposit.amount,
+          direction: deposit.action as "deposit" | "withdraw",
+        };
+      })
+      .sort((a, b) => +b.ts - +a.ts); // need to sort in descending order
 
-    // if (uiVaultConfig?.isNotionalGrowthStrategy) {
-    //   const { returns } = calcModifiedDietz(
-    //     currentUserNotionalBalance,
-    //     QUOTE_PRECISION_EXP,
-    //     formattedHistory,
-    //   );
+    if (uiVaultConfig?.isNotionalGrowthStrategy) {
+      const { returns } = calcModifiedDietz(
+        currentUserNotionalBalance,
+        QUOTE_PRECISION_EXP,
+        formattedHistory,
+      );
 
-    //   return returns * 100;
-    // } else {
-    //   const { returns } = calcModifiedDietz(
-    //     currentUserBaseBalance,
-    //     props.depositAssetConfig.precisionExp,
-    //     formattedHistory,
-    //   );
+      return returns * 100;
+    } else {
+      const { returns } = calcModifiedDietz(
+        currentUserBaseBalance,
+        props.depositAssetConfig.precisionExp,
+        formattedHistory,
+      );
 
-    //   return returns * 100;
-    // }
+      return returns * 100;
+    }
   }
 
   const stats: VaultStatProps[] = [
@@ -144,10 +144,9 @@ export const VaultDepositorStats = (props: {
         ? "USDC"
         : props.depositAssetConfig.symbol,
       loading:
-        !isVaultDepositorLoaded,
-        //  ||
-        // (uiVaultConfig?.isNotionalGrowthStrategy &&
-        //   isVaultDepositorHistoryLoading),
+        !isVaultDepositorLoaded ||
+        (uiVaultConfig?.isNotionalGrowthStrategy &&
+          isVaultDepositorHistoryLoading),
       subValue: uiVaultConfig?.isNotionalGrowthStrategy ? (
         <Typo.B4 className="flex items-center gap-1 text-text-secondary">
           <MarketIcon
