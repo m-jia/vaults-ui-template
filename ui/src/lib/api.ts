@@ -11,6 +11,7 @@ import {
   PRICE_PRECISION_EXP,
   PublicKey,
   SpotMarkets,
+  PerpMarkets,
 } from "@drift-labs/sdk";
 import { Connection } from "@solana/web3.js";
 import { COMMON_UI_UTILS, USDC_SPOT_MARKET_INDEX } from "@drift/common";
@@ -34,8 +35,11 @@ export const setupClients = (authority?: PublicKey) => {
 
   const accountLoader = new BulkAccountLoader(connection, "finalized", 0); // we don't want to poll for updates
 
+  const vxVaultSpotMarketConfigs = SpotMarkets[CLUSTER].filter((market) => market.marketIndex in [0, 1, 3, 4, 19]);
+  const vxVaultPerpMarketConfigs = PerpMarkets[CLUSTER].filter((market) => market.marketIndex in [0, 1, 2]);
   const { oracleInfos, perpMarketIndexes, spotMarketIndexes } =
-    getMarketsAndOraclesForSubscription(CLUSTER);
+    // getMarketsAndOraclesForSubscription(CLUSTER);
+    getMarketsAndOraclesForSubscription(CLUSTER, vxVaultPerpMarketConfigs, vxVaultSpotMarketConfigs);
   const vaultDriftClientConfig: DriftClientConfig = {
     connection: connection,
     wallet: dummyWallet,
@@ -144,7 +148,7 @@ export const getOraclePrice = async (
     return PRICE_PRECISION; // $1
   }
 
-  const spotMarketConfig = SpotMarkets["mainnet-beta"][spotMarketIndex];
+  const spotMarketConfig = SpotMarkets[CLUSTER][spotMarketIndex];
   const oracleClient = getOracleClient(
     spotMarketConfig.oracleSource,
     connection,

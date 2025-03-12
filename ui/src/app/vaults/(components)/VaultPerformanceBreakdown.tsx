@@ -128,7 +128,7 @@ export const VaultPerformanceBreakdown = (props: {
         vaultPubkey={props.vaultPubkey}
         marketSymbol={marketSymbol}
       />
-      {/* <div className="flex flex-wrap items-center justify-between gap-2 mt-5">
+      <div className="flex flex-wrap items-center justify-between gap-2 mt-5">
         <ToggleGroup
           type="single"
           className="bg-gray-300 rounded"
@@ -163,7 +163,7 @@ export const VaultPerformanceBreakdown = (props: {
         depositAssetMarketIndex={props.depositAssetMarketIndex}
         graphType={selectedGraph}
         period={selectedPeriod}
-      /> */}
+      />
     </div>
   );
 };

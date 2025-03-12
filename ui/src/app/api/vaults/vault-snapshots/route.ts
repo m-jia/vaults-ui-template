@@ -14,12 +14,11 @@ export const GET = async (request: NextRequest) => {
     });
   }
 
-  const vaultSnapshots = {}
-  // await db
-  //   .select()
-  //   .from(vault_snapshots)
-  //   .where(eq(vault_snapshots.vault, vault))
-  //   .orderBy(asc(vault_snapshots.slot));
+  const vaultSnapshots = await db
+    .select()
+    .from(vault_snapshots)
+    .where(eq(vault_snapshots.vault, vault))
+    .orderBy(asc(vault_snapshots.slot));
 
   return NextResponse.json(vaultSnapshots, {
     headers: {
