@@ -51,7 +51,7 @@ export const VaultDepositorStats = (props: {
     props.depositAssetConfig.precisionExp,
     true,
   );
-  const currentUserNotionalBalance = getCurrentUserNotionalBalance();
+  const currentUserNotionalBalance = new BigNum(0); // getCurrentUserNotionalBalance();
 
   const totalBaseEarnings = getTotalBaseEarnings();
   const totalNotionalEarnings = new BigNum(0); // getTotalNotionalEarnings();

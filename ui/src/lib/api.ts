@@ -30,10 +30,11 @@ export const setupClients = (authority?: PublicKey) => {
     throw new Error("NEXT_PUBLIC_RPC_OVERRIDE is not set");
   }
 
-  const connection = new Connection(rpcUrl, "finalized");
+  const stateCommitment = 'finalized';
+  const connection = new Connection(rpcUrl, stateCommitment);
   const dummyWallet = COMMON_UI_UTILS.createThrowawayIWallet(authority);
 
-  const accountLoader = new BulkAccountLoader(connection, "finalized", 0); // we don't want to poll for updates
+  const accountLoader = new BulkAccountLoader(connection, stateCommitment, 0); // we don't want to poll for updates
 
   const vxVaultSpotMarketConfigs = SpotMarkets[CLUSTER].filter((market) => market.marketIndex in [0, 1, 3, 4, 19]);
   const vxVaultPerpMarketConfigs = PerpMarkets[CLUSTER].filter((market) => market.marketIndex in [0, 1, 2]);

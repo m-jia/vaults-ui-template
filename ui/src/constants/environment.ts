@@ -31,7 +31,7 @@ const Env: EnvironmentVariables = {
     ["local", "master", "devnet"].includes(process.env.NEXT_PUBLIC_DRIFT_ENV),
   basePollingRateMs: process.env.NEXT_PUBLIC_BASE_POLLING_RATE_MS
     ? Number(process.env.NEXT_PUBLIC_BASE_POLLING_RATE_MS)
-    : 1000,
+    : 0,
   rpcOverride: process.env.NEXT_PUBLIC_RPC_OVERRIDE,
   priorityFeePollingMultiplier: 5,
   txSenderRetryInterval: 5000,
